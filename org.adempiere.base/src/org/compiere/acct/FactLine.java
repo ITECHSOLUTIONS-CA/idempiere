@@ -726,9 +726,11 @@ public final class FactLine extends X_Fact_Acct
 			if (AD_Org_ID == 0)
 				AD_Org_ID = m_doc.getAD_Org_ID();
 		}
-
-		Timestamp convDate = getDateAcct();
-
+		
+		Timestamp convDate = m_acctSchema.get_ValueAsBoolean("IsPostToDocumentDate")
+				? getDateTrx()
+				: getDateAcct();
+		
 		if (( m_doc instanceof Doc_BankStatement || m_doc instanceof Doc_AllocationHdr ) && m_docLine != null)
 			convDate = m_docLine.getDateConv();
 
