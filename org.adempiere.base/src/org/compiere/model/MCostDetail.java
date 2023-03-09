@@ -837,7 +837,7 @@ public class MCostDetail extends X_M_CostDetail
 	{
 		if (!isSOTrx() && getM_InOutLine_ID() > 0)
 		{
-			String docBaseType = DB.getSQLValueString((String)null, 
+			String docBaseType = DB.getSQLValueString(get_TrxName(), 
 					INOUTLINE_DOCBASETYPE_SQL, getM_InOutLine_ID());
 			return Doc.DOCTYPE_MatShipment.equals(docBaseType);
 		}
