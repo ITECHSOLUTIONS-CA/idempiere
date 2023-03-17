@@ -103,6 +103,7 @@ import org.compiere.model.MInfoWindow;
 import org.compiere.model.MLookupFactory;
 import org.compiere.model.MLookupInfo;
 import org.compiere.model.MProcess;
+import org.compiere.model.MReference;
 import org.compiere.model.MRole;
 import org.compiere.model.MSysConfig;
 import org.compiere.model.MTable;
@@ -1066,7 +1067,9 @@ public class InfoWindow extends InfoPanel implements ValueChangeListener, EventL
 		
 		StringBuilder builder = new StringBuilder();
 		MTable table = MTable.get(Env.getCtx(), infoWindow.getAD_Table_ID());
-		if (!hasIsActiveEditor() && table.get_ColumnIndex("IsActive") >=0 ) {
+		MReference ref = m_gridfield != null && m_gridfield.getAD_Reference_Value_ID() > 0 ? MReference.get(Env.getCtx(), m_gridfield.getAD_Reference_Value_ID()) : null;
+		boolean onlyActive = ref == null || !ref.isShowInactiveRecords();
+		if (!hasIsActiveEditor() && table.get_ColumnIndex("IsActive") >= 0 && onlyActive) {
 			if (p_whereClause != null && p_whereClause.trim().length() > 0) {
 				builder.append(" AND ");
 			}
@@ -1395,6 +1398,10 @@ public class InfoWindow extends InfoPanel implements ValueChangeListener, EventL
 	protected void prepareTable(ColumnInfo[] layout, String from, String where,
 			String orderBy) {
 		super.prepareTable(layout, from, where, orderBy);
+
+		addViewIDToQuery();
+		addKeyViewToQuery();
+
 		if (m_sqlMain.indexOf("@") >= 0) {
 			String sql = Env.parseContext(infoContext, p_WindowNo, m_sqlMain, true);
 			if (sql == null || sql.length() == 0) {
@@ -1403,10 +1410,7 @@ public class InfoWindow extends InfoPanel implements ValueChangeListener, EventL
 				m_sqlMain = sql;
 			}
 		}
-		
-		addViewIDToQuery();
-		addKeyViewToQuery();
-		
+
 		if (m_sqlMain.length() > 0 &&  infoWindow.isDistinct()) {
 			m_sqlMain = m_sqlMain.substring("SELECT ".length());
 			m_sqlMain = "SELECT DISTINCT " + m_sqlMain;			
