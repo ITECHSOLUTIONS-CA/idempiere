@@ -220,7 +220,7 @@ public class MField extends X_AD_Field implements ImmutablePOSupport
 		}
 
 		// set Table field read only if appears in combination with Record ID (Display Type Record ID)
-		MColumn column = MColumn.get(getAD_Column_ID());
+		MColumn column = MColumn.getCopy(getCtx(), getAD_Column_ID(), get_TrxName());
 		if(column.getColumnName().equalsIgnoreCase("AD_Table_ID")) {
 			MTab parent = MTab.get(getAD_Tab_ID());
 			for(MField field : parent.getFields(false, get_TrxName())) {
