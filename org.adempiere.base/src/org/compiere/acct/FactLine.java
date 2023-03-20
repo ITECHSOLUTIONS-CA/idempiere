@@ -33,6 +33,7 @@ import org.compiere.model.MCurrency;
 import org.compiere.model.MFactAcct;
 import org.compiere.model.MMovement;
 import org.compiere.model.MRevenueRecognitionPlan;
+import org.compiere.model.MSysConfig;
 import org.compiere.model.MUOM;
 import org.compiere.model.X_C_AcctSchema_Element;
 import org.compiere.model.X_Fact_Acct;
@@ -727,7 +728,10 @@ public final class FactLine extends X_Fact_Acct
 				AD_Org_ID = m_doc.getAD_Org_ID();
 		}
 
-		Timestamp convDate = getDateAcct();
+		// 
+		Timestamp convDate = MSysConfig.getBooleanValue("IsPostToDocumentDate", false, getAD_Client_ID())
+				? getDateTrx()
+				: getDateAcct();
 
 		if (( m_doc instanceof Doc_BankStatement || m_doc instanceof Doc_AllocationHdr ) && m_docLine != null)
 			convDate = m_docLine.getDateConv();
