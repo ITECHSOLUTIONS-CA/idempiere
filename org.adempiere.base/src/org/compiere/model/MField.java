@@ -218,7 +218,6 @@ public class MField extends X_AD_Field implements ImmutablePOSupport
 			if (getIsToolbarButton() != null)
 				setIsToolbarButton(null);
 		}
-
 		// set Table field read only if appears in combination with Record ID (Display Type Record ID)
 		MColumn column = MColumn.getCopy(getCtx(), getAD_Column_ID(), get_TrxName());
 		if(column.getColumnName().equalsIgnoreCase("AD_Table_ID")) {
@@ -245,7 +244,7 @@ public class MField extends X_AD_Field implements ImmutablePOSupport
 			}
 		}
 		//
-		
+	
 		//validate logic expression
 		if (newRecord || is_ValueChanged(COLUMNNAME_ReadOnlyLogic)) {
 			if (isActive() && !Util.isEmpty(getReadOnlyLogic(), true) && !getReadOnlyLogic().startsWith("@SQL=")) {
